@@ -4,19 +4,19 @@ const store = {
             {
                 title: 'Справочник тегов',
                 key: 'directory',
-                path: 'directory'
+                path: 'directory',
             },
             {
                 title: 'Главная',
                 key: 'home',
-                path: 'home'
+                path: 'home',
             },
             {
                 title: 'Избранное',
                 key: 'favorites',
-                path: 'favorites'  
-            }
-        ]
+                path: 'favorites',
+            },
+        ],
     },
     actions: {},
     mutations: {},
