@@ -23,6 +23,7 @@ export default defineComponent({
         tab
     },
     data: () => ({
+        randomCatSrc: null,
         catLogoSrc: cat,
         darkThemeLogoSrc: darkTheme,
         lightThemeLogoSrc: lightTheme

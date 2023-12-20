@@ -11,6 +11,8 @@
   "dependencies": {
     "@typescript-eslint/parser": "^6.15.0",
     "core-js": "^3.8.3",
+    "moment": "^2.29.4",
+    "object-hash": "^3.0.0",
     "sass-loader": "^13.3.2",
     "vue": "^3.3.8",
     "vue-router": "^4.2.5"
