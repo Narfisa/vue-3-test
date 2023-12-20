@@ -1,19 +1,22 @@
 <template>
-    <div class="head">
+    <div :class="['head', theme]">
         <img :src="catLogoSrc" class="cat-logo" />
         <div class="tabs">
             <tab v-for="menuItem in menu" :key="menuItem.key" :title="menuItem.title" :to="menuItem.path" />
         </div>
-        <img :src="themeLogo" :class="['theme-logo', theme]" />
+        <img :src="themeLogo" class="theme-logo" />
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import tab from './atoms/tab.vue'
+
 import cat from '@assets/icons/cat-logo.svg'
 import darkTheme from '@assets/icons/dark-theme.svg'
 import lightTheme from '@assets/icons/light-theme.svg'
+
+import menuT from '@interface/store/layout/menu'
 
 export default defineComponent({
     components: {
@@ -25,9 +28,15 @@ export default defineComponent({
         lightThemeLogoSrc: lightTheme
     }),
     computed: {
-        menu() { return this.$store.state.layout.menu },
-        theme() { return this.$store.state.layout.theme },
-        themeLogo() { return this.theme !== 'dark' ? this.darkThemeLogoSrc : this.lightThemeLogoSrc }
+        menu (): Array<menuT> { return this.$store.state.layout.menu },
+        theme: {
+            get (): string { return this.$store.state.layout.theme },
+            set (value: String) { this.$store.commit('layout/setTheme', value) }
+        },
+        themeLogo () { return this.theme !== 'dark' ? this.darkThemeLogoSrc : this.lightThemeLogoSrc }
+    },
+    methods: {
+        switchTheme () { this.theme = this.theme === 'dark' ? 'light' : 'dark' }
     }
 })
 </script>
@@ -57,10 +66,11 @@ export default defineComponent({
 
     .theme-logo {
         justify-self: end;
-        height: 32px;
-        width: 32px;
-        &.light {
-            color: black;
+        height: 30px;
+        width: 30px;
+        cursor: pointer;
+        &:hover {
+            opacity: 0.8;
         }
     }
 }

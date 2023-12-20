@@ -18,8 +18,18 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Alias */
+    "paths": {
+      "@/*": ["./src/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@components/*": ["./src/components/*"],
+      "@views/*": ["./src/views/*"],
+      "@store/*": ["./src/store/*"],
+      "@interface/*": ["./src/interface/*"],
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "src/store/store.js", "src/store/layout.js", "src/store/app.js", "src/main.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

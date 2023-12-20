@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import { fileURLToPath, URL } from "url"
+import path from 'path'
 import vue from '@vitejs/plugin-vue'
 import eslint from 'vite-plugin-eslint'
 
@@ -15,12 +15,13 @@ export default defineConfig({
     }
   },
   resolve: {
-    alias: [
-      { find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
-      { find: '@assets', replacement: fileURLToPath(new URL('./src/assets', import.meta.url)) },
-      { find: '@components', replacement: fileURLToPath(new URL('./src/components', import.meta.url)) },
-      { find: '@views', replacement: fileURLToPath(new URL('./src/views', import.meta.url)) },
-      { find: '@store', replacement: fileURLToPath(new URL('./src/store', import.meta.url)) },
-    ],
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@assets': path.resolve(__dirname, './src/assets'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@views': path.resolve(__dirname, './src/views'),
+      '@store': path.resolve(__dirname, './src/store'),
+      '@interface': path.resolve(__dirname, './src/interface')
+    },
   },
 })

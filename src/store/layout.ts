@@ -1,3 +1,7 @@
+// TYPESCRIPT
+import Menu from '@interface/store/layout/menu'
+import Store from '@interface/store/layout'
+
 const avialableThemes = ['light', 'dark']
 
 const store = {
@@ -18,12 +22,12 @@ const store = {
                 key: 'favorites',
                 path: 'favorites',
             },
-        ],
-        theme: 'light' // see avialableThemes
+        ] as Array<Menu>,
+        theme: 'light' as string // see avialableThemes
     },
     actions: {},
     mutations: {
-        setTheme (state, value) {
+        setTheme (state:Store, value:string) {
             if (!avialableThemes.includes(value)) return
             state.theme = value
         }
