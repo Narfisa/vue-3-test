@@ -1,28 +1,28 @@
 <template>
-  <div class="head">
-    <div class="logo">Cats</div>
-    <div class="tabs">
-      <tab
+    <div class="head">
+        <div class="logo">Cats</div>
+        <div class="tabs">
+            <tab
                 v-for="menuItem in menu"
                 :key="menuItem.key"
                 :title="menuItem.title"
                 :to="menuItem.path"
             />
+        </div>
+        <div class="theme">Theme</div>
     </div>
-    <div class="theme">Theme</div>
-  </div>
 </template>
 
 <script>
-import tab from './atoms/tab.vue';
+import tab from './atoms/tab.vue'
 
 export default {
     components: { tab },
     computed: {
         menu() {
             return this.$store.state.layout.menu
-    },
-    },
+        }
+    }
 }
 </script>
 

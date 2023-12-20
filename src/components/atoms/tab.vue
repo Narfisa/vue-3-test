@@ -1,7 +1,7 @@
 <template>
     <router-link :to="to" :activeClass="'current'" class="tab">
         <span class="title"> {{ title }} </span>
-    <div class="border" />
+        <div class="border" />
     </router-link>
 </template>
 
