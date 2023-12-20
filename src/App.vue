@@ -1,16 +1,12 @@
 <script setup lang="ts">
-import Header from './components/Header.vue'
+import AppHeader from './components/AppHeader.vue'
 </script>
 
 <template>
-  <Header />
+  <AppHeader />
   
   <router-view />
 </template>
 
-<style lang="scss" scoped>
-#app {
-  height: 100%;
-  width: 100%;
-}
+<style lang="scss">
 </style>
