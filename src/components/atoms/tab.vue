@@ -6,12 +6,20 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from 'vue'
+
+export default defineComponent({
     props: {
-        to: { type: String, required: true },
-        title: { type: String },
-    },
-}
+        to: {
+            type: String,
+            required: true
+        },
+        title: {
+            type: String,
+            required: true
+        }
+    }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -23,12 +31,7 @@ export default {
   text-decoration: none;
   .title {
     padding: 0px 2px;
-    color: #212529;
-    font-family: "IBM Plex Sans", sans-serif;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 24px;
+    @include textStyle_heading-5;
   }
   .border {
     width: 0%;

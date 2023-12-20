@@ -8,7 +8,7 @@ module.exports = {
     'eslint:recommended'
   ],
   parserOptions: {
-    parser: '@babel/eslint-parser'
+    parser: '@typescript-eslint/parser'
   },
   rules: {
     indent: ['error', 4, { SwitchCase: 1 }],

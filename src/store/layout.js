@@ -1,3 +1,5 @@
+const avialableThemes = ['light', 'dark']
+
 const store = {
     state: {
         menu: [
@@ -17,9 +19,15 @@ const store = {
                 path: 'favorites',
             },
         ],
+        theme: 'light' // see avialableThemes
     },
     actions: {},
-    mutations: {},
+    mutations: {
+        setTheme (state, value) {
+            if (!avialableThemes.includes(value)) return
+            state.theme = value
+        }
+    },
     namespaced: true,
 }
 
