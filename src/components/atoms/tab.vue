@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="to" :activeClass="'current'" class="tab">
+    <router-link :to="to" :activeClass="'current'" :class="['tab', theme]">
         <span class="title"> {{ title }} </span>
         <div class="border" />
     </router-link>
@@ -18,6 +18,9 @@ export default defineComponent({
             type: String,
             required: true
         }
+    },
+    computed: {
+        theme () { return this.$store.state.layout.theme }
     }
 })
 </script>
@@ -50,6 +53,11 @@ export default defineComponent({
     .border {
       width: 100%;
     }
+  }
+
+  &.dark {
+    .title { color: white }
+    .border { background: $dark_theme_20;}
   }
 }
 </style>

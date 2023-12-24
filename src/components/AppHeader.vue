@@ -1,10 +1,10 @@
 <template>
     <div :class="['head', theme]">
-        <img :src="dogLogoSrc" class="dog-logo" />
+        <img :src="dogLogoSrc[theme]" class="dog-logo" />
         <div class="tabs">
             <tab v-for="menuItem in menu" :key="menuItem.key" :title="menuItem.title" :to="menuItem.path" />
         </div>
-        <img :src="themeLogo" class="theme-logo" />
+        <img :src="themeLogo" class="theme-logo" @click="switchTheme" />
     </div>
 </template>
 
@@ -13,6 +13,7 @@ import { defineComponent } from 'vue'
 import tab from './atoms/tab.vue'
 
 import dog from '@assets/icons/dog.svg'
+import dogLight from '@assets/icons/dog-light.svg'
 import darkTheme from '@assets/icons/dark-theme.svg'
 import lightTheme from '@assets/icons/light-theme.svg'
 
@@ -24,7 +25,7 @@ export default defineComponent({
     },
     data: () => ({
         randomCatSrc: null,
-        dogLogoSrc: dog,
+        dogLogoSrc: { light: dog, dark: dogLight },
         darkThemeLogoSrc: darkTheme,
         lightThemeLogoSrc: lightTheme
     }),
@@ -73,6 +74,11 @@ export default defineComponent({
         &:hover {
             opacity: 0.7;
         }
+    }
+
+    &.dark {
+        background: $dark_theme-100;
+        box-shadow: none;
     }
 }
 </style>

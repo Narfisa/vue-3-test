@@ -1,5 +1,5 @@
 <template>
-    <div class="main-page">
+    <div :class="[theme, 'main-page']">
         <div class="control">
             <Dropdown
                 :itemList="breedsWithSubBreedsList"
@@ -28,6 +28,7 @@ export default defineComponent({
         selectedItems: []
     }),
     computed: {
+        theme () { return this.$store.state.layout.theme },
         breeds () { return this.$store.state.store.breeds },
         uiButtonTitle () {
             const base = 'Случайное изображение'
@@ -90,6 +91,10 @@ export default defineComponent({
 
     .random-image {
         max-height: 700px;
+    }
+
+    &.dark {
+        background: $dark_theme-80;
     }
 }
 </style>

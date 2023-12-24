@@ -23,13 +23,14 @@ const store = {
                 path: 'favorites',
             },
         ] as Array<Menu>,
-        theme: 'light' as string // see avialableThemes
+        theme: localStorage.getItem('theme') || 'light' as string // see avialableThemes
     },
     actions: {},
     mutations: {
         setTheme (state:Store, value:string) {
             if (!avialableThemes.includes(value)) return
             state.theme = value
+            localStorage.setItem('theme', value)
         }
     },
     namespaced: true,
