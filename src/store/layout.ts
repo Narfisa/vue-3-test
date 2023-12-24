@@ -8,7 +8,7 @@ const store = {
     state: {
         menu: [
             {
-                title: 'Справочник тегов',
+                title: 'Справочник пород',
                 key: 'directory',
                 path: 'directory',
             },

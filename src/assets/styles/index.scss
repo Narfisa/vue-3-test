@@ -1,6 +1,31 @@
 @import './colors.scss';
 @import './fonts.scss';
+@import './media.scss';
 
-*{
+body {
+  margin: 0;
   color: #212529;
+  text-align: left;
+  background-color: #fff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box; // 1
+}
+
+@mixin defaultScroll {
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $color_gray-60;
+    height: 4px;
+    border-radius: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }

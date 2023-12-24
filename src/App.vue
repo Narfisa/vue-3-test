@@ -41,7 +41,25 @@ export default defineComponent({
 <template>
     <AppHeader />
 
-    <router-view />
+    <div class="wrapper">
+        <router-view />
+    </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+#app {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: max-content 1fr;
+
+    .wrapper {
+        height: 100%;
+        width: 100%;
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+}
+</style>

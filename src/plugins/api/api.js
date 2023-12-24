@@ -13,7 +13,7 @@ class api {
     actionModules = { queries }
 
     constructor () {
-        this.apiHost = 'https://cataas.com/'
+        this.apiHost = 'https://dog.ceo/api/breed'
 
         setInterval(this.checkCache.bind(this), 10000)
     }

@@ -1,6 +1,6 @@
 <template>
     <div :class="['head', theme]">
-        <img :src="catLogoSrc" class="cat-logo" />
+        <img :src="dogLogoSrc" class="dog-logo" />
         <div class="tabs">
             <tab v-for="menuItem in menu" :key="menuItem.key" :title="menuItem.title" :to="menuItem.path" />
         </div>
@@ -12,7 +12,7 @@
 import { defineComponent } from 'vue'
 import tab from './atoms/tab.vue'
 
-import cat from '@assets/icons/cat-logo.svg'
+import dog from '@assets/icons/dog.svg'
 import darkTheme from '@assets/icons/dark-theme.svg'
 import lightTheme from '@assets/icons/light-theme.svg'
 
@@ -24,7 +24,7 @@ export default defineComponent({
     },
     data: () => ({
         randomCatSrc: null,
-        catLogoSrc: cat,
+        dogLogoSrc: dog,
         darkThemeLogoSrc: darkTheme,
         lightThemeLogoSrc: lightTheme
     }),
@@ -59,7 +59,7 @@ export default defineComponent({
         justify-content: space-around;
     }
 
-    .cat-logo {
+    .dog-logo {
         justify-self: start;
         height: 32px;
         width: 32px;
@@ -71,7 +71,7 @@ export default defineComponent({
         width: 30px;
         cursor: pointer;
         &:hover {
-            opacity: 0.8;
+            opacity: 0.7;
         }
     }
 }

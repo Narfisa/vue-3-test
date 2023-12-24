@@ -1,0 +1,49 @@
+$desktop: 1920px;
+$tablet: 768px;
+$mobile: 375px;
+@mixin respond-to($media) {
+  @if $media == mobile {
+    @media only screen and (max-width: $tablet) { @content; }
+  } @else if $media == tablet {
+    @media only screen and (min-width: $tablet + 1) and (max-width: $desktop - 1) { @content; }
+  } @else if $media == desktop {
+    @media only screen and (min-width: $desktop) { @content; }
+  } @else if $media == exceptDesktop {
+    @media only screen and (max-width: $desktop - 1){ @content; }
+  } @else {
+    @media only screen and (max-width: $media){ @content; }
+  }
+}
+
+$phone-min: 320px;
+$phone-max: 639.99px;
+
+$tablet-min: 640px;
+$tablet-max: 1024.99px;
+
+$laptop-min: 1025px;
+$laptop-max: 1366px;
+
+$desktop-min: 1367px;
+$desktop-max: 1920.99px;
+
+$largeDesktop-min: 1920.001px;
+
+
+@mixin showFor($media1, $media2: '', $media3: '') {
+  @if $media1 == phone or $media2 == phone  or $media3 == phone {
+    @media only screen and (max-width: $phone-max) { @content; }
+  }
+  @if $media1 == tablet or $media2 == tablet or $media3 == tablet {
+    @media only screen and (min-width: $tablet-min) and (max-width: $tablet-max) { @content; }
+  }
+  @if $media1 == laptop or $media2 == laptop or $media3 == laptop {
+    @media only screen and (min-width: $laptop-min) and (max-width: $laptop-max) { @content; }
+  }
+  @if $media1 == desktop or $media2 == desktop or $media3 == desktop {
+    @media only screen and (min-width: $desktop-min) and (max-width: $desktop-max) { @content; }
+  }
+  @if $media1 == largeDesktop or $media2 == largeDesktop or $media3 == largeDesktop {
+    @media only screen and (min-width: $largeDesktop-min){ @content; }
+  }
+}

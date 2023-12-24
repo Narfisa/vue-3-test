@@ -1,6 +1,15 @@
+
+const state = {
+    breedsWithSubBreeds: [],
+    favoriteBreeds: []
+}
+
+const mutations = {
+}
+
 export default {
     namespaced: true,
-    state: {},
+    state,
     actions: {},
-    mutations: {},
+    mutations,
 }

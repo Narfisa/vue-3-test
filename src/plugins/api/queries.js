@@ -1,6 +1,14 @@
 export default {
-    getRandomCat: {
-        url: 'cat',
-        headers: { 'Content-Type': 'image/png' }
-    }
+    getRandomDog: {
+        url: 'image/random'
+    },
+    getRandomBreedDog: (breed) => ({
+        url: `${breed}/images/random`
+    }),
+    getSubBreeds: (breed) => ({
+        url: `${breed}/list`
+    }),
+    getImagesFromBreed: (breed) => ({
+        url: `${breed}/images`
+    })
 }
