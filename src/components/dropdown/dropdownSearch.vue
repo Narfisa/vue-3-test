@@ -16,10 +16,10 @@
 
             <div class="controls">
                 <div v-show="isCanClear && ((searchText && searchText.length > 0) || selectedValue)" class="clear-input" @click.stop="!isUnactive ? clear() : ''">
-                    <i class="icon ci-close clear" />
+                    &#10006;
                 </div>
                 <div v-if="type === 'select'" class="arrow-icon-wrap">
-                    <i :class="[`ci-arrow-f-${isDropdownCardOpen ? 'top' : 'down'}`, 'icon']" />
+                    {{ isDropdownCardOpen ? '&#8593;' : '&#8595;' }}
                 </div>
             </div>
         </div>
@@ -68,6 +68,7 @@ export default defineComponent({
             default: 'select' // select/search/mobileSearch
         }
     },
+    emits: ['input', 'clear', 'setIsOpenCard'],
     data: () => ({
         searchText: '',
         isWasFocused: '',

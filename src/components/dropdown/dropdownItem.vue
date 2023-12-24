@@ -3,7 +3,7 @@
         <checkbox
             v-if="multipleSelect"
             :isChecked="isSelected"
-            :icon="isSelected ? 'ci-check_s' : null"
+            :icon="isSelected ? 'ci-check_s' : ''"
             @clicked="$emit('select', item, isSelected)"
         />
         <span class="title" v-html="markFilteredText(item.title)" />
@@ -11,12 +11,14 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
 import checkbox from '@components/atoms/checkbox.vue'
 
-export default {
+export default defineComponent({
     name: 'DropdownItem',
     components: { checkbox },
+    emits: ['select'],
     props: {
         item: {
             type: Object,
@@ -44,7 +46,7 @@ export default {
         }
     },
     methods: {
-        markFilteredText (text) {
+        markFilteredText (text:string):string {
             if (!text && ![0, '0'].includes(text)) return text
             text = text.toString()
             if (this.searchText.length === 0) return text
@@ -57,7 +59,7 @@ export default {
                 this.markFilteredText(text.substr(endIndex, text.length - endIndex))
         }
     }
-}
+})
 </script>
 
 <style lang="scss" scoped>

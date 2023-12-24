@@ -9,8 +9,11 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+    emits: ['clicked', 'update:isChecked'],
     props: {
         isDisabled: {
             type: Boolean,
@@ -56,7 +59,7 @@ export default {
             this.$emit('clicked', this.isCheckedLocal)
         }
     }
-}
+})
 </script>
 
 <style lang="scss" scoped>

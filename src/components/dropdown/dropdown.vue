@@ -38,6 +38,7 @@ import DropdownSearch from './dropdownSearch.vue'
 
 export default defineComponent({
     components: { dropdownCard, DropdownSearch },
+    emits: ['select'],
     props: {
         multipleSelect: {
             type: Boolean,

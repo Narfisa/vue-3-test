@@ -28,7 +28,7 @@ export default {
     props: {
         to: {
             type: String,
-            default: 'body'
+            default: '#app'
         },
         title: {
             type: [Object, String],
@@ -112,7 +112,6 @@ export default {
   }
 
   @include showFor (phone) {
-    height: 100%;
     .modal.full {
       max-width: 100vw;
       width: 100vw;

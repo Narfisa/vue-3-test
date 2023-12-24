@@ -1,10 +1,6 @@
 <template>
-    <div
-        :class="['dropdown-card', { mobile: isMobile }, position]"
-    >
-        <div :class="`dropdown_${_uid}`" />
-
-        <Teleport v-if="!isMobile" :to="`dropdown_${_uid}`">
+    <div :class="['dropdown-card', { mobile: isMobile }, position]">
+        <template v-if="!isMobile">
             <dropdown-search
                 v-if="_type === 'search'"
                 :type="'search'"
@@ -26,11 +22,11 @@
                     @select="select"
                 />
             </div>
-            <span v-if="itemList.length > 0 && filteredDataBySearchText.length === 0" class="no-found"> {{ $l.getp('noFoundTitle', 'views/furnace/params') }} </span>
-            <span v-if="itemList.length === 0" class="empty"> {{ $l.getp('empty', 'components/smartDropdownCard') }} </span>
-        </Teleport>
+            <span v-if="itemList.length > 0 && filteredDataBySearchText.length === 0" class="no-found"> noFoundTitle </span>
+            <span v-if="itemList.length === 0" class="empty"> empty </span>
+        </template>
 
-        <modal-form v-else :to="'modals-3'" :title="mobileTitle" height="dropdown" @close="$emit('close')">
+        <modal-form v-else :title="mobileTitle" height="dropdown" @close="$emit('close')">
             <div :class="['content', { 'with-search': _type === 'search' }]" @click.stop>
                 <dropdown-search
                     v-if="_type === 'search'"
@@ -52,25 +48,28 @@
                         @select="select"
                     />
                 </div>
-                <span v-else-if="itemList.length > 0" class="no-found"> {{ $l.getp('noFoundTitle', 'views/furnace/params') }} </span>
-                <span v-else class="empty"> {{ $l.getp('empty', 'components/smartDropdownCard') }} </span>
+                <span v-else-if="itemList.length > 0" class="no-found"> noFoundTitle </span>
+                <span v-else class="empty"> empty </span>
 
                 <div class="controls">
-                    <UIButton :color="'blue'" :text="$l.getp('apply', 'global/buttons')" :isUnactive="selectedItemsIds.length === 0" @clicked="confirm" />
+                    <UIButton :color="'blue'" :text="'apply'" :isUnactive="selectedItemsIds.length === 0" @clicked="confirm" />
                 </div>
             </div>
         </modal-form>
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue'
+
 import dropdownItem from './dropdownItem.vue'
 import UIButton from '@components/atoms/UIButton.vue'
 import ModalForm from '@components/modal/modalForm.vue'
 import DropdownSearch from './dropdownSearch.vue'
 
-export default {
+export default defineComponent({
     components: { dropdownItem, ModalForm, UIButton, DropdownSearch },
+    emits: ['select', 'close'],
     props: {
         itemList: {
             type: Array,
@@ -115,8 +114,6 @@ export default {
         position: 'bottom'
     }),
     computed: {
-        parent () { return this.parentRef ?? this.$parent.$el }, // компонент, с дропдауном
-        dropdown () { return this.dropdownRef ?? this.$parent.$el }, // компонент, по нажатию на который появляется выпадающий список
         _type () { return !this.type ? (this.itemList.length > 10 ? 'search' : 'select') : this.type },
         // на мобилке выбранные элементы сохраняются в локальный массив и не эмитятся до нажатия на кнопку подтвердить
         curSelectedItemsSource () { return this.isMobile ? this.localSelectedItems : this.selectedItems },
@@ -147,7 +144,6 @@ export default {
             })[0]
             this.$nextTick(() => this.scrollToElem(itemToScroll))
         }
-        this.calcPosition()
     },
     methods: {
         confirm () { this.$emit('select', this.curSelectedItemsSource); this.$emit('close') },
@@ -192,29 +188,9 @@ export default {
             // проверка на промежуточный элемент группы - если прошлый и следующий элемент выбраны - это промежуточный элемент в группе
             if (isPrevItemSelected && isNextItemSelected) return 'between'
             return false
-        },
-        calcPosition () {
-            if (this.direction) {
-                this.position = this.direction
-                return
-            }
-            const dropdownElement = this.dropdown
-
-            const dropdownHeight = dropdownElement.clientHeight
-            const dropdownListHeight = 304 // если брать из рефа, то там почему-то неверное значение, а 304-максимальная высота
-            const additionalFreeSpace = 16
-            const dropdownOffsetTop = dropdownElement.offsetTop
-            const parentHeight = this.parent.clientHeight
-            // свободное пространство в пикселях до нижней границы родительского элемента
-            // Из высоты родительского компонента вычитаем отступ от дропдауна и минусуем высоту дропдауна, выпадающего списка
-            // и дополнительный отступ
-            const placeBeforeBottom = parentHeight - dropdownOffsetTop - (dropdownListHeight + dropdownHeight + additionalFreeSpace)
-
-            // если свободного пространства снизу мало(или не осталось) и при этом сверху есть - отображать сверху
-            if (placeBeforeBottom < 0 && dropdownOffsetTop > 304) this.position = 'top'
         }
     }
-}
+})
 </script>
 
 <style lang="scss" scoped>

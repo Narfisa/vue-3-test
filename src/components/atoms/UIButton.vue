@@ -15,7 +15,8 @@
     >
         <div class="button-content">
             <div v-if="icon" class="icon-wrap">
-                <i :class="[icon, 'icon']" />
+                <template v-if="icon === 'ci-close'"> X </template>
+                <i v-else :class="[icon, 'icon']" />
             </div>
             <span v-if="text" class="text"> {{ text }} </span>
         </div>

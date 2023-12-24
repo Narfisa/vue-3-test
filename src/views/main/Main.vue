@@ -1,8 +1,13 @@
 <template>
     <div class="main-page">
         <div class="control">
-            <Dropdown v-if="false" />
-            <uiButton :color="'blue'" :text="'Случайное изображение'" :isLoading="isLoading" @clicked="getRandomCat" />
+            <Dropdown
+                :itemList="breedsWithSubBreedsList"
+                :selectedItems="selectedItems"
+                placeholder="Выберите породу"
+                @select="(data) => selectedItems = data"
+            />
+            <uiButton :color="'blue'" :text="uiButtonTitle" :isLoading="isLoading" @clicked="getRandomDog" />
         </div>
         <img v-if="randomDogSrc" :src="randomDogSrc" class="random-image" />
     </div>
@@ -24,12 +29,18 @@ export default defineComponent({
     }),
     computed: {
         breeds () { return this.$store.state.store.breeds },
+        uiButtonTitle () {
+            const base = 'Случайное изображение'
+            return this.selectedItems.length === 0
+                ? base
+                : `${base} с ${this.selectedItems[0].title}`
+        },
         breedsWithSubBreedsList () {
             const out: Array<object> = []
             Object.keys(this.breeds).map(breed => {
                 if (this.breeds[breed].length > 0) {
                     this.breeds[breed].map((subBreed: string) => out.push({
-                        id: `${breed}_${subBreed}`,
+                        id: `${breed}-${subBreed}`,
                         title: `${subBreed} ${breed}`
                     }))
                 } else {
@@ -40,9 +51,11 @@ export default defineComponent({
         }
     },
     methods: {
-        async getRandomCat() {
+        async getRandomDog() {
             this.isLoading = true
-            const r = await this._request('queries/getRandomDog')
+            const r = this.selectedItems.length > 0
+                ? await this._request('queries/getRandomBreedDog', this.selectedItems[0].id.split('-').join('/'))
+                : await this._request('queries/getRandomDog')
             if (!r.isSuccess) {
                 console.error(r)
             } else {
@@ -52,7 +65,7 @@ export default defineComponent({
         }
     },
     mounted() {
-        this.getRandomCat()
+        this.getRandomDog()
     }
 })
 </script>
@@ -71,6 +84,8 @@ export default defineComponent({
     .control {
         display: grid;
         grid-template-columns: max-content max-content max-content;
+        align-items: center;
+        column-gap: 16px;
     }
 
     .random-image {

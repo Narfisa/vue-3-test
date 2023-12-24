@@ -20,7 +20,7 @@ export default defineComponent({
             if (!r.isSuccess) {
                 console.error(r)
             } else {
-                this.$store.commit('store/setBreeds', r.data)
+                this.$store.commit('store/setBreeds', r.data?.message)
             }
         },
         onResizeWindow () { this.calcWindowType() },
@@ -58,7 +58,6 @@ export default defineComponent({
 <style lang="scss">
 #app {
     height: 100%;
-    width: 100%;
     display: grid;
     grid-template-rows: max-content 1fr;
 

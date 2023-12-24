@@ -10,6 +10,7 @@ export default {
         url: 'breeds/list/all'
     },
     getRandomBreedDog: (breed) => ({
-        url: `breed/${breed}/images/random`
+        url: `breed/${breed}/images/random`,
+        isAllowCaching: false
     })
 }
