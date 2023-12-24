@@ -1,15 +1,25 @@
+type State = {
+    breeds: Record<string, string[]>,
+    favoriteBreeds: Array<string>
+}
+
 
 const state = {
-    breedsWithSubBreeds: [],
+    breeds: [],
     favoriteBreeds: []
 }
 
 const mutations = {
+    setBreeds (state: State, value: State['breeds']) {
+        state.breeds = value
+    }
 }
 
-export default {
+const module = {
     namespaced: true,
     state,
     actions: {},
     mutations,
 }
+
+export default module

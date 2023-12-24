@@ -1,20 +1,29 @@
 <script lang="ts">
 import AppHeader from './components/AppHeader.vue'
+import mixin from '@/plugins/mixin/ActionMixin.js'
 
 import { defineComponent } from 'vue'
 
 export default defineComponent({
+    mixins: [mixin],
     components: {
         AppHeader
     },
     mounted () {
+        this.getBreeds()
         this.calcWindowType()
         window.addEventListener('resize', this.onResizeWindow.bind(this))
     },
     methods: {
-        onResizeWindow () {
-            this.calcWindowType()
+        async getBreeds () {
+            const r = await this._request('queries/getAllBreeds')
+            if (!r.isSuccess) {
+                console.error(r)
+            } else {
+                this.$store.commit('store/setBreeds', r.data)
+            }
         },
+        onResizeWindow () { this.calcWindowType() },
         calcWindowType () {
             const windowWidth = window.innerWidth
             if (windowWidth < 640) {

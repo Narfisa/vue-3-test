@@ -1,6 +1,8 @@
 import Menu from "./menu";
 
-export default interface Layout {
+type Layout = {
     menu: Menu,
     theme: string
 }
+
+export default Layout

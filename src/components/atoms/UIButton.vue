@@ -30,8 +30,9 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
     props: {
         isLoading: {
             type: Boolean,
@@ -65,8 +66,9 @@ export default {
             type: String,
             default: '' // hover title
         }
-    }
-}
+    },
+    emits: ['clicked']
+})
 </script>
 
 <style lang="scss" scoped>

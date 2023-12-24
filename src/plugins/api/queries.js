@@ -1,14 +1,15 @@
 export default {
     getRandomDog: {
-        url: 'image/random'
+        url: 'breeds/image/random',
+        isAllowCaching: false
+    },
+    getImagesFromBreed: (breed) => ({
+        url: `breeds/${breed}/images`
+    }),
+    getAllBreeds: {
+        url: 'breeds/list/all'
     },
     getRandomBreedDog: (breed) => ({
-        url: `${breed}/images/random`
-    }),
-    getSubBreeds: (breed) => ({
-        url: `${breed}/list`
-    }),
-    getImagesFromBreed: (breed) => ({
-        url: `${breed}/images`
+        url: `breed/${breed}/images/random`
     })
 }
