@@ -3,12 +3,12 @@ export default {
         url: 'breeds/image/random',
         isAllowCaching: false
     },
-    getImagesFromBreed: (breed) => ({
-        url: `breeds/${breed}/images`
-    }),
     getAllBreeds: {
         url: 'breeds/list/all'
     },
+    getImagesFromBreed: (breed) => ({
+        url: `breed/${breed}/images`
+    }),
     getRandomBreedDog: (breed) => ({
         url: `breed/${breed}/images/random`,
         isAllowCaching: false

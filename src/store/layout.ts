@@ -10,18 +10,13 @@ const store = {
             {
                 title: 'Справочник пород',
                 key: 'directory',
-                path: 'directory',
+                path: '/directory',
             },
             {
                 title: 'Главная',
                 key: 'home',
-                path: 'home',
-            },
-            {
-                title: 'Избранное',
-                key: 'favorites',
-                path: 'favorites',
-            },
+                path: '/home',
+            }
         ] as Array<Menu>,
         theme: localStorage.getItem('theme') || 'light' as string // see avialableThemes
     },
