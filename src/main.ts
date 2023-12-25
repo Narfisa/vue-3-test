@@ -20,7 +20,7 @@ moment.updateLocale('ru', {
 })
 
 import api from '@plugins/api'
-
+import FilterScript from '@plugins/Scripts/filter'
 
 const app = createApp(App)
 
@@ -29,5 +29,6 @@ app.use(router)
 
 app.use(VueMoment, { moment })
 app.use(api)
+app.use(FilterScript)
 
 app.mount('#app')

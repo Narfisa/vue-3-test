@@ -3,6 +3,7 @@ import AppHeader from './components/AppHeader.vue'
 import mixin from '@/plugins/mixin/ActionMixin.js'
 
 import { defineComponent } from 'vue'
+import hash from 'object-hash'
 
 export default defineComponent({
     mixins: [mixin],
@@ -10,11 +11,18 @@ export default defineComponent({
         AppHeader
     },
     mounted () {
+        this.$LivecycleScript.onFirstAppInit()
+        console.log(this.$route)
         this.getBreeds()
         this.calcWindowType()
         window.addEventListener('resize', this.onResizeWindow.bind(this))
     },
     computed: {
+        currentPageParams () {
+            const currentPage = this.$store.state.app.currentPage
+            const currentPageParams = this.$store.getters[`app/${currentPage}/pageParams`]
+            return currentPage && currentPageParams ? hash({ currentPage, currentPageParams }) : null
+        },
         theme () { return this.$store.state.layout.theme }
     },
     methods: {
@@ -44,6 +52,13 @@ export default defineComponent({
         setWindowType (type:string) {
             if (type !== this.$store.state.app.windowType) {
                 this.$store.commit('app/setWindowType', type)
+            }
+        }
+    },
+    watch: {
+        currentPageParams (newValue, oldValue) {
+            if (newValue !== oldValue) {
+                this.$LivecycleScript.onChangeCurrentPageParams(newValue, oldValue)
             }
         }
     }

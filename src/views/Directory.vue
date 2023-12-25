@@ -37,17 +37,19 @@ export default defineComponent({
     data: () => ({
         openedRowIndex: -1,
         searchText: '',
-        breed: null,
         breedImages: null
     }),
     computed: {
         theme() { return this.$store.state.layout.theme },
         breeds() { return this.$store.state.store.breeds },
+        breed: {
+            get () { return this.$store.state.app.directory.breed },
+            set (value: string) { this.$store.commit('app/directory/setBreed', value) }
+        },
         tableData() {
             const searchText = this.searchText
             if (searchText.length === 0) return this.breeds || []
 
-            // TO DO
             const out = {}
             Object.keys(this.breeds).map(breed => {
                 if (breed.toString().toLowerCase().includes(searchText.toLowerCase())) {
@@ -58,6 +60,8 @@ export default defineComponent({
         }
     },
     mounted () {
+        console.log(this.breed)
+        this.$store.commit('app/setCurrentPage', 'directory')
         if (this.breed) this.getImagesFromBreed()
     },
     methods: {
