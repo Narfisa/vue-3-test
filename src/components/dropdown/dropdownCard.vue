@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, getCurrentInstance } from 'vue'
 
 import dropdownItem from './dropdownItem.vue'
 import UIButton from '@components/atoms/UIButton.vue'
@@ -131,6 +131,7 @@ export default defineComponent({
         isMobile () { return this.$store.state.app.windowType === 'mobile' }
     },
     mounted () {
+        console.log(getCurrentInstance().uid)
         this.localSelectedItems = [...this.selectedItems]
         if (this.selectedItems.length > 0) {
             const selectedItemsWithIndexes = []

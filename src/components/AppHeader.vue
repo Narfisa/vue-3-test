@@ -56,6 +56,7 @@ export default defineComponent({
     align-items: center;
     justify-items: center;
     grid-template-columns: 1fr 2fr 1fr;
+    column-gap: 32px;
 
     .tabs {
         width: 100%;

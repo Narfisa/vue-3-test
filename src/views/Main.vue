@@ -28,6 +28,7 @@ export default defineComponent({
         selectedItems: []
     }),
     computed: {
+        theme () { return this.$store.state.layout.theme },
         breeds () { return this.$store.state.store.breeds },
         uiButtonTitle () {
             const base = 'Случайное изображение'
