@@ -14,6 +14,9 @@ export default defineComponent({
         this.calcWindowType()
         window.addEventListener('resize', this.onResizeWindow.bind(this))
     },
+    computed: {
+        theme () { return this.$store.state.layout.theme }
+    },
     methods: {
         async getBreeds () {
             const r = await this._request('queries/getAllBreeds')
@@ -50,7 +53,7 @@ export default defineComponent({
 <template>
     <AppHeader />
 
-    <div class="wrapper">
+    <div :class="['wrapper', theme]">
         <router-view />
     </div>
 </template>
@@ -60,6 +63,7 @@ export default defineComponent({
     height: 100%;
     display: grid;
     grid-template-rows: max-content 1fr;
+    overflow: hidden;
 
     .wrapper {
         height: 100%;
@@ -68,6 +72,13 @@ export default defineComponent({
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: 1fr;
+        color: #212529;
+        overflow: hidden;
+
+        &.dark {
+            background: $dark_theme-80;
+            color: white;
+        }
     }
 }
 </style>

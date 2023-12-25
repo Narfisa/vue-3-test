@@ -48,6 +48,9 @@ export default defineComponent({
     background: $color_gray-5;
     box-shadow: 0px 0px 2px $color_gray-90;
     padding: 16px;
+    position: sticky;
+    top: 0px;
+    z-index: 333;
 
     display: grid;
     align-items: center;
