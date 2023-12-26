@@ -60,7 +60,6 @@ export default defineComponent({
         }
     },
     mounted () {
-        console.log(this.breed)
         this.$store.commit('app/setCurrentPage', 'directory')
         if (this.breed) this.getImagesFromBreed()
     },
@@ -119,8 +118,9 @@ export default defineComponent({
 
   .control {
     display: grid;
-    grid-template-columns: max-content max-content;
+    grid-template-columns: max-content min-content;
     align-items: center;
+    width: fit-content;
     @include textStyle_text-16;
     cursor: pointer;
     padding-bottom: 16px;

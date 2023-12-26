@@ -41,7 +41,6 @@ class FilterScript {
 
     updatingStateFromUrlGetParams () {
         const urlParams = this.$app.$route.query
-        console.log(this.$app.$route)
         const getParamKeys = [
             { key: 'ct', mutation: 'filter/chart/setChartType' },
             { key: 'u', mutation: 'filter/unit/setValue' },
@@ -65,7 +64,7 @@ class FilterScript {
         try {
             const getParamsValue = 'ps' in urlParams ? JSON.parse(atob(urlParams.ps)) : false
             if (getParamsValue.cp && getParamsValue.cpp) {
-                this.$app.$store.commit(`page/${getParamsValue.cp}/setPageParams`, getParamsValue.cpp)
+                this.$app.$store.commit(`app/${getParamsValue.cp}/setPageParams`, getParamsValue.cpp)
             }
         } catch (e) {
             //

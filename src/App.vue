@@ -10,9 +10,34 @@ export default defineComponent({
     components: {
         AppHeader
     },
+    created() {
+        this.$router.beforeEach((to, from, next) => { // only on route
+            // SAVE QUERY PARAMS
+            const queryToSave = ['ct', 'u', 'u2', 'tr', 'mvs', 'ps']
+            let isNeedUpdate = false
+            let redirectPath = false
+
+            // REDIRECT
+            if ('redirect' in from.query && from.query.redirect !== to.path && from.query.redirect !== '') {
+                isNeedUpdate = true
+                redirectPath = from.query.redirect
+            }
+
+            for (const queryKey in from.query) {
+                if (queryToSave.includes(queryKey)) {
+                    if (queryKey in to.query || !from.query[queryKey]) continue
+                    isNeedUpdate = true
+                    to.query[queryKey] = from.query[queryKey]
+                }
+            }
+            if (isNeedUpdate) {
+                if (redirectPath) return next({ path: redirectPath, query: to.query })
+                return next(to)
+            }
+            return next()
+        })
+    },
     mounted () {
-        this.$LivecycleScript.onFirstAppInit()
-        console.log(this.$route)
         this.getBreeds()
         this.calcWindowType()
         window.addEventListener('resize', this.onResizeWindow.bind(this))
@@ -56,6 +81,9 @@ export default defineComponent({
         }
     },
     watch: {
+        $route () {
+            this.$LivecycleScript.onFirstAppInit()
+        },
         currentPageParams (newValue, oldValue) {
             if (newValue !== oldValue) {
                 this.$LivecycleScript.onChangeCurrentPageParams(newValue, oldValue)

@@ -66,6 +66,7 @@ export default defineComponent({
         }
     },
     mounted() {
+        this.$store.commit('app/setCurrentPage', 'main')
         this.getRandomDog()
     }
 })

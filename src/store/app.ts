@@ -8,11 +8,11 @@ const state = {
 }
 
 const mutations = {
-    setCurrentPage (state:stateT, value:string) {
+    setCurrentPage (state:stateT, value:stateT['currentPage']) {
         if (state.currentPage === value) return
         state.currentPage = value
     },
-    setWindowType (state:stateT, value:string) { state.windowType = value }
+    setWindowType (state:stateT, value:stateT['windowType']) { state.windowType = value }
 }
 
 export default {
