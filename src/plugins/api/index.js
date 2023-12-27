@@ -2,6 +2,9 @@ import ApiClass from './api'
 
 const api = new ApiClass()
 
-export default function install(Vue) {
-    Vue.config.globalProperties.$api = api
+export default {
+    install (app) {
+        app.provide('$api', api)
+        app.config.globalProperties.$api = api
+    }
 }

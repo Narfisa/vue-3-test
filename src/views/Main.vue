@@ -14,40 +14,47 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, inject, computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
+
 import uiButton from '@components/atoms/UIButton.vue'
-import mixin from '@/plugins/mixin/ActionMixin.js'
+import { mixin } from '@/plugins/mixin/ActionMixin2.js'
 import Dropdown from '@/components/dropdown/dropdown.vue'
 
 export default defineComponent({
-    mixins: [mixin],
     components: { uiButton, Dropdown },
-    data: () => ({
-        randomDogSrc: null,
-        isLoading: false,
-        selectedItems: []
-    }),
-    computed: {
-        theme () { return this.$store.state.layout.theme },
-        breeds () { return this.$store.state.store.breeds },
-        favoriteBreeds () { return this.$store.state.store.favoriteBreeds },
-        uiButtonTitle () {
+    setup() {
+        // component data
+        let randomDogSrc = ref(null)
+        let isLoading = ref(false)
+        let selectedItems = ref([])
+
+        // store data
+        const store = useStore()
+        const theme = computed(() => store.state.layout.theme)
+        const breeds = computed(() => store.state.store.breeds)
+        const favoriteBreeds = computed(() => store.state.store.favoriteBreeds)
+
+        // ui button
+        const uiButtonTitle = computed(() => {
             const base = 'Случайное изображение'
-            return this.selectedItems.length === 0
+            return selectedItems.value.length === 0
                 ? base
-                : `${base} с ${this.selectedItems[0].title}`
-        },
-        breedsWithSubBreedsList () {
+                : `${base} с ${selectedItems.value[0].title}`
+        })
+
+        // dropdown data
+        const breedsWithSubBreedsList = computed(() => {
             type BreedsList = {
                 id: string,
                 title: string,
                 secondValue?: string
-            } 
-
+            }
             let out: BreedsList[] = []
-            Object.keys(this.breeds).map(breed => {
-                if (this.breeds[breed].length > 0) {
-                    this.breeds[breed].map((subBreed: string) => out.push({
+
+            Object.keys(breeds.value).map(breed => {
+                if (breeds.value[breed].length > 0) {
+                    breeds.value[breed].map((subBreed: string) => out.push({
                         id: `${breed}-${subBreed}`,
                         title: `${subBreed} ${breed}`
                     }))
@@ -55,39 +62,48 @@ export default defineComponent({
                     out.push({ id: breed, title: breed })
                 }
             })
-            
+
             out = out.map(breed => {
                 const obj = { ...breed }
-                if (this.favoriteBreeds.includes(breed.id)) {
+                if (favoriteBreeds.value.includes(breed.id)) {
                     obj.secondValue = 'В избранном'
                 }
                 return obj
             })
 
             return out.sort((a, b) => {
-                const isAInFavorite = this.favoriteBreeds.includes(a.id)
-                const isBInFavorite = this.favoriteBreeds.includes(b.id)
+                const isAInFavorite = favoriteBreeds.value.includes(a.id)
+                const isBInFavorite = favoriteBreeds.value.includes(b.id)
                 return isAInFavorite && !isBInFavorite ? -1 : 1
             })
-        }
-    },
-    methods: {
-        async getRandomDog() {
-            this.isLoading = true
-            const r = this.selectedItems.length > 0
-                ? await this._request('queries/getRandomBreedDog', this.selectedItems[0].id.split('-').join('/'))
-                : await this._request('queries/getRandomDog')
+        })
+
+        // get data
+        const $api = inject('$api') // plugin
+        const { request } = mixin($api) // mixin
+        const getRandomDog = async () => {
+            isLoading.value = true
+            const r = selectedItems.value.length > 0
+                ? await request('queries/getRandomBreedDog', selectedItems.value[0].id.split('-').join('/'))
+                : await request('queries/getRandomDog')
             if (!r.isSuccess) {
                 console.error(r)
             } else {
-                this.randomDogSrc = r.data.message
+                randomDogSrc.value = r.data.message
             }
-            this.isLoading = false
+            isLoading.value = false
         }
-    },
-    mounted() {
-        this.$store.commit('app/setCurrentPage', 'main')
-        this.getRandomDog()
+
+        onMounted(() => {
+            store.commit('app/setCurrentPage', 'main')
+            getRandomDog()
+        })
+
+        return {
+            randomDogSrc, isLoading, selectedItems,
+            theme, uiButtonTitle, breedsWithSubBreedsList,
+            getRandomDog
+        }
     }
 })
 </script>
