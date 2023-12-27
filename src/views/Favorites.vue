@@ -24,36 +24,32 @@
 
 <script lang="ts">
 import UIInput from '@/components/atoms/UIInput.vue'
-import mixin from '@/plugins/mixin/ActionMixin.js'
 
 import starSavedLightTheme from '@assets/icons/favorite_saved.svg'
 import starSavedDarkTheme from '@assets/icons/favorite-light_saved.svg'
 
-import { defineComponent } from 'vue'
+import { defineComponent, ref, computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
 
 import tableData from '@typescript/breedTable'
 export default defineComponent({
-    mixins: [mixin],
     components: { UIInput },
-    data: () => ({
-        searchText: '',
-        favoriteIconSrc: {
-            dark: starSavedDarkTheme,
-            light: starSavedLightTheme
-        }
-    }),
-    computed: {
-        theme() { return this.$store.state.layout.theme },
-        favoriteBreeds () { return this.$store.state.store.favoriteBreeds },
-        breed: {
-            get () { return this.$store.state.app.directory.breed },
-            set (value: string) { this.$store.commit('app/directory/setBreed', value) }
-        },
-        breeds() {
-            const data = this.$store.state.store.breeds
+    setup () {
+        // comp data
+        const searchText = ref('')
+        const favoriteIconSrc = ref({ dark: starSavedDarkTheme, light: starSavedLightTheme })
+
+        // store data
+        const store = useStore()
+        const theme = computed(() => store.state.layout.theme)
+        const favoriteBreeds = computed(() => store.state.store.favoriteBreeds)
+
+        // calc data
+        const breeds = computed(() => {
+            const data = store.state.store.breeds
             const out: tableData[] = []
             Object.keys(data).map(breed => {
-                if (this.favoriteBreeds.includes(breed)) {
+                if (favoriteBreeds.value.includes(breed)) {
                     out.push({
                         key: breed,
                         subBreed: data[breed]
@@ -61,23 +57,28 @@ export default defineComponent({
                 }
             })
             return out
-        },
-        tableData(): tableData[] {
-            const searchText = this.searchText
-            return this.breeds.filter((breed: tableData) => {
-                return breed.key.toString().toLowerCase().includes(searchText.toLowerCase())
+        })
+        const tableData = computed(() => {
+            return breeds.value.filter((breed: tableData) => {
+                return breed.key.toString().toLowerCase().includes(searchText.value.toLowerCase())
             })
+        })
+
+        const switchBreedIsInFavorite = (breed: string) => {
+            const _favoriteBreeds = favoriteBreeds.value
+            const favoriteBreedIndex = _favoriteBreeds.findIndex((favoriteBreed: string) => favoriteBreed === breed)
+            _favoriteBreeds.splice(favoriteBreedIndex, 1)
+            store.commit('store/setFavoriteBreeds', _favoriteBreeds)
         }
-    },
-    mounted () {
-        this.$store.commit('app/setCurrentPage', 'favorites')
-    },
-    methods: {
-        switchBreedIsInFavorite (breed: string) {
-            const favoriteBreeds = this.favoriteBreeds
-            const favoriteBreedIndex = favoriteBreeds.findIndex((favoriteBreed: string) => favoriteBreed === breed)
-            favoriteBreeds.splice(favoriteBreedIndex, 1)
-            this.$store.commit('store/setFavoriteBreeds', favoriteBreeds)
+
+        onMounted (() => {
+            store.commit('app/setCurrentPage', 'favorites')
+        })
+
+        return {
+            favoriteIconSrc, searchText,
+            theme, tableData,
+            switchBreedIsInFavorite
         }
     }
 })
