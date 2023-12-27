@@ -1,6 +1,6 @@
 // TYPESCRIPT
-import Menu from '@interface/store/layout/menu'
-import Store from '@interface/store/layout'
+import Menu from '@/typescript/store/layout/menu'
+import Store from '@/typescript/store/layout'
 
 const avialableThemes = ['light', 'dark']
 
@@ -16,6 +16,11 @@ const store = {
                 title: 'Главная',
                 key: 'home',
                 path: '/home',
+            },
+            {
+                title: 'Избранное',
+                key: 'favorites',
+                path: '/favorites',
             }
         ] as Array<Menu>,
         theme: localStorage.getItem('theme') || 'light' as string // see avialableThemes

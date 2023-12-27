@@ -17,7 +17,7 @@ import dogLight from '@assets/icons/dog-light.svg'
 import darkTheme from '@assets/icons/dark-theme.svg'
 import lightTheme from '@assets/icons/light-theme.svg'
 
-import menuT from '@interface/store/layout/menu'
+import menuT from '@typescript/store/layout/menu'
 
 export default defineComponent({
     components: {

@@ -1,4 +1,4 @@
-import stateT from '@interface/store/app' 
+import stateT from '@/typescript/store/app' 
 
 import directory from './page/directory'
 

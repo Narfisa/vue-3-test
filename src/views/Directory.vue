@@ -44,7 +44,6 @@ export default defineComponent({
     mixins: [mixin],
     components: { UIInput },
     data: () => ({
-        openedRowIndex: -1,
         searchText: '',
         breedImages: null,
         favoriteIconSrc: {

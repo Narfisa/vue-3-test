@@ -27,7 +27,7 @@
       "@components/*": ["./src/components/*"],
       "@views/*": ["./src/views/*"],
       "@store/*": ["./src/store/*"],
-      "@interface/*": ["./src/interface/*"],
+      "@typescript/*": ["./src/typescript/*"],
       "@plugins/*": ["./src/plugins/*"],
     }
   },
