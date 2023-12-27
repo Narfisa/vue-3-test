@@ -30,6 +30,7 @@ export default defineComponent({
     computed: {
         theme () { return this.$store.state.layout.theme },
         breeds () { return this.$store.state.store.breeds },
+        favoriteBreeds () { return this.$store.state.store.favoriteBreeds },
         uiButtonTitle () {
             const base = 'Случайное изображение'
             return this.selectedItems.length === 0
@@ -37,7 +38,13 @@ export default defineComponent({
                 : `${base} с ${this.selectedItems[0].title}`
         },
         breedsWithSubBreedsList () {
-            const out: Array<object> = []
+            type BreedsList = {
+                id: string,
+                title: string,
+                secondValue?: string
+            } 
+
+            let out: BreedsList[] = []
             Object.keys(this.breeds).map(breed => {
                 if (this.breeds[breed].length > 0) {
                     this.breeds[breed].map((subBreed: string) => out.push({
@@ -48,7 +55,20 @@ export default defineComponent({
                     out.push({ id: breed, title: breed })
                 }
             })
-            return out
+            
+            out = out.map(breed => {
+                const obj = { ...breed }
+                if (this.favoriteBreeds.includes(breed.id)) {
+                    obj.secondValue = 'В избранном'
+                }
+                return obj
+            })
+
+            return out.sort((a, b) => {
+                const isAInFavorite = this.favoriteBreeds.includes(a.id)
+                const isBInFavorite = this.favoriteBreeds.includes(b.id)
+                return isAInFavorite && !isBInFavorite ? -1 : 1
+            })
         }
     },
     methods: {
