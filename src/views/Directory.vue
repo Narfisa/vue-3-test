@@ -3,13 +3,14 @@
         <template v-if="!breed">
             <UIInput v-model="searchText" class="input" />
             <div v-if="!breed" class="table">
-                <div v-for="(breed, breedKey) in tableData" :key="breedKey" class="row" @click="breedClicked(breedKey)">
-                    <span class="breed"> {{ breedKey }} </span>
-                    <template v-if="breed.length > 0">
-                        <div v-for="(subBreed, subBreedKey) in breed" :key="subBreedKey" class="sub-breed">
+                <div v-for="breed in tableData" :key="breed.key" class="row" @click="breedClicked(breed.key)">
+                    <span class="breed"> {{ breed.key }} </span>
+                    <div v-if="breed.subBreed.length > 0"  class="sub-breeds">
+                        <div v-for="(subBreed, subBreedKey) in breed.subBreed" :key="subBreedKey" class="sub-breed">
                             {{ subBreed }}
                         </div>
-                    </template>
+                    </div>
+                    <img :src="calcFavoriteIconSrc(breed.key)" class="favorite-logo" @click.stop="switchBreedIsInFavorite(breed.key)" />
                 </div>
             </div>
         </template>
@@ -29,34 +30,56 @@
 <script lang="ts">
 import UIInput from '@/components/atoms/UIInput.vue'
 import mixin from '@/plugins/mixin/ActionMixin.js'
+import starSavedLightTheme from '@assets/icons/favorite_saved.svg'
+import starUnsavedLightTheme from '@assets/icons/favorite_unsaved.svg'
+import starSavedDarkTheme from '@assets/icons/favorite-light_saved.svg'
+import starUnsavedDarkTheme from '@assets/icons/favorite-light_unsaved.svg'
 import { defineComponent } from 'vue'
 
+type tableData = {
+    key: string;
+    subBreed: string[];
+};
 export default defineComponent({
     mixins: [mixin],
     components: { UIInput },
     data: () => ({
         openedRowIndex: -1,
         searchText: '',
-        breedImages: null
+        breedImages: null,
+        favoriteIconSrc: {
+            dark: { saved: starSavedDarkTheme, unsaved: starUnsavedDarkTheme },
+            light: { saved: starSavedLightTheme, unsaved: starUnsavedLightTheme }
+        }
     }),
     computed: {
         theme() { return this.$store.state.layout.theme },
-        breeds() { return this.$store.state.store.breeds },
+        favoriteBreeds () { return this.$store.state.store.favoriteBreeds },
         breed: {
             get () { return this.$store.state.app.directory.breed },
             set (value: string) { this.$store.commit('app/directory/setBreed', value) }
         },
-        tableData() {
-            const searchText = this.searchText
-            if (searchText.length === 0) return this.breeds || []
-
-            const out = {}
-            Object.keys(this.breeds).map(breed => {
-                if (breed.toString().toLowerCase().includes(searchText.toLowerCase())) {
-                    out[breed] = this.breeds[breed]
-                }
+        breeds() {
+            const data = this.$store.state.store.breeds
+            const out: tableData[] = []
+            Object.keys(data).map(breed => {
+                out.push({
+                    key: breed,
+                    subBreed: data[breed]
+                })
             })
             return out
+        },
+        tableData() {
+            const searchText = this.searchText
+            const out: tableData[] = this.breeds.filter((breed: tableData) => {
+                return breed.key.toString().toLowerCase().includes(searchText.toLowerCase())
+            })
+            return out.sort((a, b) => {
+                const isAInFavorite = this.favoriteBreeds.includes(a.key)
+                const isBInFavorite = this.favoriteBreeds.includes(b.key)
+                return isAInFavorite && !isBInFavorite ? -1 : 1
+            })
         }
     },
     mounted () {
@@ -64,9 +87,23 @@ export default defineComponent({
         if (this.breed) this.getImagesFromBreed()
     },
     methods: {
+        calcFavoriteIconSrc (breed: string) {
+            const favoriteIconObjFromTheme = this.favoriteIconSrc[this.theme]
+            const isBreedInFavorite = this.favoriteBreeds.includes(breed)
+            return favoriteIconObjFromTheme[isBreedInFavorite ? 'saved' : 'unsaved']
+        },
         breedClicked (breed: string) {
             this.breed = breed
             this.getImagesFromBreed()
+        },
+        switchBreedIsInFavorite (breed: string) {
+            const favoriteBreeds = this.favoriteBreeds
+            const isBreedInFavorite = favoriteBreeds.includes(breed)
+            if (isBreedInFavorite) {
+                const favoriteBreedIndex = favoriteBreeds.findIndex((favoriteBreed: string) => favoriteBreed === breed)
+                favoriteBreeds.splice(favoriteBreedIndex, 1)
+            } else favoriteBreeds.push(breed)
+            this.$store.commit('store/setFavoriteBreeds', favoriteBreeds)
         },
         async getImagesFromBreed () {
             const r = await this._request('queries/getImagesFromBreed', this.breed)
@@ -97,17 +134,40 @@ export default defineComponent({
 
     .row {
       padding: 16px 8px;
+      display: grid;
+      grid-template-columns: 1fr max-content;
+      grid-template-rows: max-content max-content;
+      align-items: center;
       cursor: pointer;
       border-radius: 16px;
 
       &:hover {
         background: $color_gray-10;
+        .favorite-logo { opacity: 1;}
+      }
+      .breed { grid-area: 1/1/1/1; }
+
+      .sub-breeds {
+        grid-area: 2/1/-1/-1;
+        display: grid;
+        grid-auto-flow: row;
+        padding-top: 8px;
+        row-gap: 4px;
+        .sub-breed {
+          padding-left: 16px;
+        }
       }
 
-      .sub-breed {
-        cursor: default;
-        padding-top: 8px;
-        padding-left: 16px;
+
+      .favorite-logo {
+        grid-area: 1/2/1/-1;
+        height: 24px;
+        width: 24px;
+        opacity: 0;
+        cursor: pointer;
+        &:hover {
+          opacity: 0.7;
+        }
       }
     }
   }
