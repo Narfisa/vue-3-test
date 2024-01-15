@@ -6,7 +6,7 @@ type State = {
 
 const state = {
     breeds: [],
-    favoriteBreeds: localStorage.getItem('favoriteBreeds') ? localStorage.getItem('favoriteBreeds').split(',') : []
+    favoriteBreeds: (localStorage.getItem('favoriteBreeds') as string)?.split(',') || []
 }
 
 const mutations = {

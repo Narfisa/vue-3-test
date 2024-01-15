@@ -77,7 +77,7 @@ export default defineComponent({
 
         return {
             favoriteIconSrc, searchText,
-            theme, tableData,
+            theme, tableData, breeds, favoriteBreeds,
             switchBreedIsInFavorite
         }
     }
